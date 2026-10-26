@@ -3,7 +3,7 @@ name: cherry-skill-marketplace
 description: '用户要求搜索、安装、查看或卸载 Skill，或内置能力不足时使用：先 search_skills，再 install_skill；无结果用 skill-creator 创建。'
 ---
 
-# Cherry Skill Marketplace
+# 小花技能 Marketplace
 
 市场不是普通任务的默认路由。文档、演示和表格先使用对应内置 Skill。
 
