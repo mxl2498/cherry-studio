@@ -182,11 +182,18 @@ function prepareSystemSpeechHelper(
     const destination = 'system-speech/cherry-system-speech.exe'
     const resources = (config.extraResources ?? []).filter((resource) => resource.to !== destination)
     if (arch === 'x64') {
-      buildNativeHelper(arch, platform)
-      resources.push({
-        from: 'packages/system-speech/dist/native/win32-x64/cherry-system-speech.exe',
-        to: destination
-      })
+      try {
+        buildNativeHelper(arch, platform)
+        resources.push({
+          from: 'packages/system-speech/dist/native/win32-x64/cherry-system-speech.exe',
+          to: destination
+        })
+      } catch (err) {
+        // Graceful degradation: skip the optional SAPI speech helper when the
+        // Visual Studio C++/ATL toolchain is unavailable. The rest of the app
+        // (including online TTS/ASR) is unaffected.
+        console.warn(`[xiaohua] Skipping optional system-speech helper: ${err.message}`)
+      }
     }
     config.extraResources = resources
   }
