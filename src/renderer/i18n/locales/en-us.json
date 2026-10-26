@@ -672,7 +672,7 @@
   "chat.compaction.compacting": "Compacting context…",
   "chat.compaction.failed": "Context compaction failed",
   "chat.conversation.new": "New Chat",
-  "chat.default.name": "Cherry Assistant",
+  "chat.default.name": "XiaoHua Assistant",
   "chat.default.topic.name": "Default Conversation",
   "chat.home.welcome_title": "What should we talk about today?",
   "chat.input.ai_disclaimer": "AI-generated content, for reference only",
