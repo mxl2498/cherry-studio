@@ -2,7 +2,7 @@ import { writeFileSync } from 'node:fs'
 import { setTimeout as delay } from 'node:timers/promises'
 
 import dayjs from 'dayjs'
-import { app, BrowserWindow, clipboard, ClipboardItem, dialog, type Display, nativeImage, screen } from 'electron'
+import { app, BrowserWindow, clipboard, dialog, type Display, nativeImage, screen } from 'electron'
 
 import { application } from '@application'
 import { loggerService } from '@logger'
@@ -618,7 +618,9 @@ export class ScreenshotOverlayService extends BaseService {
       // createFromBuffer never throws — undecodable input yields an EMPTY image, and
       // writing that wipes the clipboard while the log still claims success.
       if (nativeImage.createFromBuffer(bytes).isEmpty()) throw new Error('the result bytes could not be decoded')
-      await clipboard.write([new ClipboardItem({ 'image/png': new Blob([bytes]) })])
+      // [xiaohua] Electron 42 compatible: clipboard.write takes a single Data object
+      // (the ClipboardItem[] overload only exists in newer Electron releases).
+      await clipboard.write({ image: nativeImage.createFromBuffer(bytes) })
       logger.info('Screenshot copied to the clipboard')
     } catch (error) {
       logger.error('Failed to copy the screenshot to the clipboard', error as Error)

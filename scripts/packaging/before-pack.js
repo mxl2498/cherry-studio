@@ -126,6 +126,22 @@ async function prepareNativeModulesForElectron(
 
   // electron-builder's automatic pnpm rebuild can retain the host Node prebuild.
   // Force the ABI-sensitive addon from source for the exact target before app files are copied.
+  // [xiaohua] Skip the source rebuild when a matching prebuilt addon is already in place
+  // (e.g. downloaded via prebuild-install) and no MSVC toolchain is available.
+  const sqlitePrebuilt = path.join(
+    projectRoot,
+    'node_modules',
+    'better-sqlite3',
+    'build',
+    'Release',
+    'better_sqlite3.node'
+  )
+  if (fs.existsSync(sqlitePrebuilt)) {
+    process.stdout.write(
+      `[xiaohua] better-sqlite3 prebuilt addon found at ${sqlitePrebuilt}; skipping source rebuild\n`
+    )
+    return
+  }
   await rebuildFn({
     buildPath: projectRoot,
     electronVersion,
